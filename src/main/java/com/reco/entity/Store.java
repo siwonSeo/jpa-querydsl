@@ -46,8 +46,7 @@ public class Store{
 	@Column(name = "BUISNESS_NM")
     private String buisnessNm;
 	
-	@OneToMany()
-	@JoinColumn(name = "STORE_ID", referencedColumnName = "STORE_ID")	
+	@OneToMany(mappedBy="storeInfo")
 	List<CollectionHistory> collectionHistory = new ArrayList<>();
 	
     @Builder

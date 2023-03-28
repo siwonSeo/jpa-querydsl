@@ -39,7 +39,7 @@ public class CollectionPicture{
     private ExtensionType extesion;
 	
 	@Column(name = "COLLECTION_ID")
-	private Integer collectionId;
+	private Long collectionId;
 	
 	@Column(name = "CREATE_DATE")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -47,8 +47,6 @@ public class RecoController {
 	ResponseEntity<List<CollectionSpecResponseDto>> getCollectionInfo(
 			@PathVariable Integer id,
 			@RequestParam(value = "reqRealCollectionDate", required = true)
-			@Valid 
-			@NotEmpty(message="DD")
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate reqRealCollectionDate) {
 		return new ResponseEntity<>(recoService.getCollectionSpec(id, reqRealCollectionDate),HttpStatus.OK);
 	}

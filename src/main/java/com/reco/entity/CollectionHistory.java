@@ -54,7 +54,6 @@ public class CollectionHistory{
     @JoinColumn(name = "STORE_ID", insertable = false, updatable = false)
 	private Store storeInfo;
 	
-	@OneToMany()
-	@JoinColumn(name = "COLLECTION_ID", referencedColumnName = "COLLECTION_ID")	
+	@OneToMany(mappedBy="collectionHistory")
 	private List<CollectionPicture> collectionPictureList = new ArrayList<>();
 }

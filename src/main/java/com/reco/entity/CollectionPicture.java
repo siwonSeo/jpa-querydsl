@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -50,9 +51,19 @@ public class CollectionPicture{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@LastModifiedDate
 	private LocalDateTime updateDate;
-	
-    @ManyToOne()
+
+	@Builder
+	public CollectionPicture(String fileNm, ExtensionType extesion, Long collectionId) {
+		this.fileNm = fileNm;
+		this.extesion = extesion;
+		this.collectionId = collectionId;
+	}
+
+	@ManyToOne()
     @JoinColumn(name = "COLLECTION_ID", insertable = false, updatable = false)
-	private CollectionHistory collectionHistory;	
-	
+	private CollectionHistory collectionHistory;
+
+	public void setCollectionHistory(CollectionHistory collectionHistory){
+		this.collectionHistory = collectionHistory;
+	}
 }

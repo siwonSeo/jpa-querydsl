@@ -7,6 +7,11 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import com.reco.dto.*;
+import com.reco.entity.CollectionHistory;
+import com.reco.entity.CollectionPicture;
+import com.reco.repository.CollectionHistoryRepository;
+import com.reco.repository.CollectionPictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.reco.code.ErrorCode;
 import com.reco.common.ApiException;
-import com.reco.dto.CollectionInfoResponseDto;
-import com.reco.dto.CollectionSpecResponseDto;
-import com.reco.dto.StoreInfoResponseDto;
-import com.reco.dto.StoreRegistRequestDto;
-import com.reco.dto.StoreRegistResponseDto;
 import com.reco.entity.Store;
 import com.reco.repository.StoreRepository;
 import com.reco.repository.StoreRepositoryImpl;
@@ -29,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class RecoService {
 	private final StoreRepository storeRepository;
+	private final CollectionHistoryRepository collectionHistoryRepository;
+	private final CollectionPictureRepository collectionPictureRepository;
     private final StoreRepositoryImpl storeRepositoryImpl;
     
     @Transactional
@@ -47,7 +49,32 @@ public class RecoService {
 			.contractDate(resultStore.getContractDate())
 			.build();
 	}
-	
+
+	@Transactional
+	public PicturesRegistResponseDto registPicturesInfo(final PicturesRegistRequestDto picturesInput) {
+		Store store = storeRepository.findById(picturesInput.getId()).orElseThrow(()->{throw new ApiException(ErrorCode.NOT_FOUND_STORE);});
+
+		CollectionHistory history = collectionHistoryRepository.save(picturesInput.toHistoryEntity());
+		for(CollectionPictureDto collectionPictureDto: picturesInput.getPictureList()){
+			CollectionPicture picture = CollectionPicture.builder()
+					.collectionId(history.getId())
+					.fileNm(collectionPictureDto.getFileNm())
+					.extesion(collectionPictureDto.getExtesion())
+					.build();
+			picture.setCollectionHistory(history);
+			collectionPictureRepository.save(picture);
+		}
+		return PicturesRegistResponseDto.builder()
+				.id(history.getStoreId())
+				.collectionId(history.getId())
+				.collectionAmount(history.getCollectionAmount())
+				.collectionBarrelCnt(history.getCollectionBarrelCnt())
+				.collectionComment(history.getCollectionComment())
+				.attachFileCnt(history.getAttachFileCnt())
+				.realCollectionDate(history.getRealCollectionDate())
+				.build();
+	}
+
     public List<CollectionSpecResponseDto> getCollectionSpec(Integer storeId, LocalDate reqRealCollectionDate) {
     	List<CollectionSpecResponseDto> collectionSpecResponseDto = storeRepositoryImpl.findCollectionSpec(storeId, reqRealCollectionDate);
     	return collectionSpecResponseDto;

@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,4 +57,22 @@ public class CollectionHistory{
 	
 	@OneToMany(mappedBy="collectionHistory")
 	private List<CollectionPicture> collectionPictureList = new ArrayList<>();
+
+	public void addCollectionPicture(CollectionPicture collectionPicture){
+		collectionPicture.setCollectionHistory(this);
+		this.collectionPictureList.add(collectionPicture);
+	}
+
+	@Builder
+	public CollectionHistory(Integer storeId, Integer collectionAmount, Integer collectionBarrelCnt, Integer attachFileCnt, String collectionComment) {
+		this.storeId = storeId;
+		this.collectionAmount = collectionAmount;
+		this.collectionBarrelCnt = collectionBarrelCnt;
+		this.attachFileCnt = attachFileCnt;
+		this.collectionComment = collectionComment;
+	}
+
+	public void setStore(Store storeInfo){
+		this.storeInfo = storeInfo;
+	}
 }

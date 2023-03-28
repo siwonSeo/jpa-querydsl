@@ -1,9 +1,6 @@
 package com.reco.repository;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -11,12 +8,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.reco.dto.CollectionInfoResponseDto;
-import com.reco.dto.CollectionPictureResponseDto;
+import com.reco.dto.CollectionPictureDto;
 import com.reco.dto.CollectionSpecResponseDto;
 import com.reco.dto.StoreInfoResponseDto;
 import com.reco.dto.StoreRegistRequestDto;
@@ -100,7 +95,7 @@ public class StoreRepositoryImpl implements StoreRepositoryCustom{
 					,history.collectionAmount
 					,history.collectionBarrelCnt
 					,history.realCollectionDate
-					,list(Projections.constructor(CollectionPictureResponseDto.class,picture.fileNm,picture.extesion))
+					,list(Projections.constructor(CollectionPictureDto.class,picture.fileNm,picture.extesion))
 					)));	
 			return collectionSpecResponseDtoList;
 	}

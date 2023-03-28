@@ -54,5 +54,10 @@ public class Store{
         this.storeNm = storeNm;
         this.regionNm = regionNm;
         this.buisnessNm = buisnessNm;
-    }	
+    }
+
+    public void addCollectionHistory(CollectionHistory collectionHistory){
+        collectionHistory.setStore(this);
+        this.collectionHistory.add(collectionHistory);
+    }
 }

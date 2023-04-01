@@ -2,6 +2,7 @@ package com.reco.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +56,8 @@ public class RecoService {
 		Store store = storeRepository.findById(picturesInput.getId()).orElseThrow(()->{throw new ApiException(ErrorCode.NOT_FOUND_STORE);});
 
 		CollectionHistory history = collectionHistoryRepository.save(picturesInput.toHistoryEntity());
+
+		/*
 		for(CollectionPictureDto collectionPictureDto: picturesInput.getPictureList()){
 			CollectionPicture picture = CollectionPicture.builder()
 					.collectionId(history.getId())
@@ -64,6 +67,22 @@ public class RecoService {
 			picture.setCollectionHistory(history);
 			collectionPictureRepository.save(picture);
 		}
+		*/
+
+		List<CollectionPicture> pictureList = new ArrayList<>();
+
+		for(CollectionPictureDto collectionPictureDto: picturesInput.getPictureList()){
+			CollectionPicture picture = CollectionPicture.builder()
+					.collectionId(history.getId())
+					.fileNm(collectionPictureDto.getFileNm())
+					.extesion(collectionPictureDto.getExtesion())
+					.build();
+			picture.setCollectionHistory(history);
+			pictureList.add(picture);
+		}
+
+		collectionPictureRepository.saveAll(pictureList);
+
 		return PicturesRegistResponseDto.builder()
 				.id(history.getStoreId())
 				.collectionId(history.getId())
